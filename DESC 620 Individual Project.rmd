@@ -1,0 +1,55 @@
+---
+title: "Individual Project"
+author: "Alana Bates"
+date: '2022-04-15'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# 1 
+Get Navigation titles and navigation links. 
+```{r}
+library(rvest)
+library(dplyr)
+navigation_titles <- read_html("https://enriquegit.github.io/behavior-free/") %>%
+  html_nodes(".chapter a , .fa-align-justify") %>%
+  html_text()
+navigation_titles
+
+
+webpage <- read_html("https://enriquegit.github.io/behavior-free/")
+navigation_links <- html_nodes(page, "nav")
+links <- html_nodes(nav, "a")
+urls <- html_attr(links, "href")
+urls[1] <- ""
+urls <- paste0("https://enriquegit.github.io/behavior-free/", urls)
+head(urls)
+```
+
+# 2 
+Scrape content from a single page (the preface page).
+```{r}
+preface_page <- read_html("https://enriquegit.github.io/behavior-free") %>%
+  html_nodes(".rmdshiny, .rmdfolder, .rmdgoodpractice, .rmdcaution, .rmdinfo, p, .hasAnchor") %>%
+  html_text()
+preface_page
+```
+
+# 3
+Get content from all pages.
+```{r}
+
+for (i in 1:length(navigation_links)){
+  link = paste0("https://enriquegit.github.io/behavior-free", "/",navigation_links[i])
+  pages = read_html(link)
+}
+```
+
+```{r}
+writeLines(text, file("book.txt"))
+```
+
